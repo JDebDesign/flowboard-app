@@ -1,3 +1,4 @@
+import { MAX_NAME_LENGTH, MAX_DESCRIPTION_LENGTH } from '../lib/errors';
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import type { Card, Priority } from '../types';
@@ -64,6 +65,7 @@ export function CardModal({ initialValues, columns, currentColumnId, onClose, on
           </label>
           <input
             id="card-title"
+            maxLength={MAX_NAME_LENGTH}
             className={fields.input}
             placeholder="Enter card name..."
             value={values.title}
@@ -79,6 +81,7 @@ export function CardModal({ initialValues, columns, currentColumnId, onClose, on
           </label>
           <textarea
             id="card-description"
+            maxLength={MAX_DESCRIPTION_LENGTH}
             className={fields.textarea}
             placeholder="Add a description..."
             value={values.description}
@@ -92,6 +95,7 @@ export function CardModal({ initialValues, columns, currentColumnId, onClose, on
           </label>
           <input
             id="card-assignee"
+            maxLength={MAX_NAME_LENGTH}
             className={fields.input}
             placeholder="Who's this for?"
             value={values.assignee}

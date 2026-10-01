@@ -27,14 +27,15 @@ It's written to be read and edited by **anyone** — you don't need to know how 
 | `--color-primary-hover` | `#075985` | Hover state for anything using `--color-primary` |
 | `--color-accent` | `#8a38f5` | Reserved for the single primary call-to-action per page — today that's only the "New Board" button |
 | `--color-accent-hover` | `#7c2ff0` | Hover state for the accent button |
-| `--color-danger` | `#d4183d` | Destructive actions, error text, the "High" priority badge text |
+| `--color-danger` | `#c0132f` | Destructive actions, error text, the "High" priority badge text |
 | `--color-danger-bg` | `#fde3e8` | Background tint behind danger text: error banners, the "High" priority badge |
 | `--color-text` | `#0a0a0a` | Default body and heading text color |
-| `--color-muted` | `#717182` | De-emphasized metadata: timestamps, counts, hints, placeholder-adjacent text |
+| `--color-muted` | `#666677` | De-emphasized metadata: timestamps, counts, hints, placeholder-adjacent text |
 | `--color-border` | `rgba(0, 0, 0, 0.1)` | Default border color for inputs, cards, and dividers |
+| `--color-border-strong` | `#8a8a99` | Boundary of interactive controls (inputs, selects, textareas); meets the 3:1 non-text contrast minimum (WCAG 1.4.11) |
 | `--color-column-bg` | `#f3f4f6` | Kanban column background |
 | `--color-page-bg` | `#f8f9fb` | App page background |
-| `--color-avatar-bg` | `#6366f1` | Assignee and user avatar circle background |
+| `--color-avatar-bg` | `#4f46e5` | Assignee and user avatar circle background |
 | `--color-white` | `#ffffff` | White surfaces: cards, modals, filled-button text |
 | `--color-priority-medium-bg` | `#fef3c7` | "Medium" priority badge background |
 | `--color-priority-medium-text` | `#92400e` | "Medium" priority badge text |

@@ -1,0 +1,12 @@
+# FlowBoard
+
+> FlowBoard is a simple kanban board web app. Users sign in, create boards, organize work into columns and cards, and move cards between columns (by drag and drop or from a menu) to track progress.
+
+## What it does
+- Create, rename and delete boards
+- Add columns and cards with titles and descriptions
+- Move cards between columns with drag and drop or keyboard-accessible controls
+- Sign in with email and password or a magic link
+
+## Pages
+- [Sign in](/login): the only public page. Boards are private to each signed-in user.

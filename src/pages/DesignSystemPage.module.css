@@ -36,6 +36,8 @@
 }
 
 .badge {
+  margin: 0;
+  font-weight: inherit;
   font-size: var(--font-size-xs);
   color: var(--color-muted);
   background: var(--color-column-bg);

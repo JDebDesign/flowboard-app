@@ -1,3 +1,4 @@
+import { MAX_NAME_LENGTH } from '../lib/errors';
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { Modal } from './Modal';
@@ -35,6 +36,9 @@ export function CreateBoardModal({ onClose, onCreate, error }: CreateBoardModalP
           </label>
           <input
             id="board-name"
+            aria-invalid={error ? true : undefined}
+            aria-describedby={error ? 'board-name-error' : undefined}
+            maxLength={MAX_NAME_LENGTH}
             className={fields.input}
             placeholder="e.g. Product Roadmap"
             value={name}
@@ -42,7 +46,11 @@ export function CreateBoardModal({ onClose, onCreate, error }: CreateBoardModalP
             autoFocus
             required
           />
-          {error && <span style={{ color: 'var(--color-danger)', fontSize: 14 }}>{error}</span>}
+          {error && (
+            <span id="board-name-error" role="alert" style={{ color: 'var(--color-danger)', fontSize: 14 }}>
+              {error}
+            </span>
+          )}
         </div>
         <div className={fields.actions}>
           <Button type="button" variant="secondary" onClick={onClose}>

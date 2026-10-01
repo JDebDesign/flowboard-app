@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 import type { DragEvent } from 'react';
 import type { Card as CardType, Column as ColumnType } from '../types';
 import { Card } from './Card';
@@ -33,7 +33,8 @@ export function Column({
   onDragEndCard,
 }: ColumnProps) {
   const [isOver, setIsOver] = useState(false);
-  const listRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
+  const headingId = useId();
 
   const computeDropIndex = (clientY: number): number => {
     const container = listRef.current;
@@ -65,25 +66,33 @@ export function Column({
   };
 
   return (
-    <div
+    // Drop target for mouse drag; keyboard users move cards via the Column select in the card dialog.
+    // oxlint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+    <section
+      aria-labelledby={headingId}
       className={`${styles.column} ${isOver ? styles.columnOver : ''}`}
       onDragOver={handleDragOver}
       onDragLeave={() => setIsOver(false)}
       onDrop={handleDrop}
     >
       <div className={styles.header}>
-        <span className={styles.name}>{column.name}</span>
-        <span className={styles.count}>{cards.length}</span>
+        <h2 id={headingId} className={styles.name}>
+          {column.name}
+        </h2>
+        <span className={styles.count}>
+          {cards.length}
+          <span className="visually-hidden"> {cards.length === 1 ? 'card' : 'cards'}</span>
+        </span>
       </div>
-      <div className={styles.cardList} ref={listRef}>
-        {cards.length === 0 ? (
-          <div className={styles.emptyDropZone}>
-            <UploadIcon size={24} />
-            <span className={styles.emptyDropZoneText}>Drop a card here or add one below</span>
-          </div>
-        ) : (
-          cards.map((card, index) => (
-            <div key={card.id} data-card-index={index}>
+      {cards.length === 0 && (
+        <div className={styles.emptyDropZone}>
+          <UploadIcon size={24} />
+          <span className={styles.emptyDropZoneText}>Drop a card here or add one below</span>
+        </div>
+      )}
+      <ul className={styles.cardList} ref={listRef}>
+        {cards.map((card, index) => (
+            <li key={card.id} data-card-index={index} className={styles.cardItem}>
               <Card
                 card={card}
                 isDragging={draggingCardId === card.id}
@@ -98,13 +107,12 @@ export function Column({
                 }}
                 onDragEnd={onDragEndCard}
               />
-            </div>
-          ))
-        )}
-      </div>
+            </li>
+        ))}
+      </ul>
       <Button variant="ghost-muted" className={styles.addCard} icon={<PlusIcon size={16} />} onClick={onAddCard}>
         Add card
       </Button>
-    </div>
+    </section>
   );
 }

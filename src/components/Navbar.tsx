@@ -23,15 +23,19 @@ export function Navbar() {
           </span>
           <span className={styles.brandName}>FlowBoard</span>
         </Link>
-        <Link to="/boards" className={styles.navLink}>
-          Boards
-        </Link>
-        <Link to="/design-system" className={`${styles.navLink} ${styles.designSystemLink}`}>
-          Design System
-        </Link>
+        <nav aria-label="Main" className={styles.nav}>
+          <Link to="/boards" className={styles.navLink}>
+            Boards
+          </Link>
+          <Link to="/design-system" className={`${styles.navLink} ${styles.designSystemLink}`}>
+            Design System
+          </Link>
+        </nav>
       </div>
       <div className={styles.actions}>
-        <span className={styles.avatar}>{initial}</span>
+        <span className={styles.avatar} aria-hidden="true">
+          {initial}
+        </span>
         <Button variant="ghost-muted" className={styles.signOut} onClick={handleSignOut}>
           Sign out
         </Button>

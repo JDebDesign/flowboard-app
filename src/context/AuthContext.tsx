@@ -1,3 +1,4 @@
+import { friendlyError } from '../lib/errors';
 import { createContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { Session, User } from '@supabase/supabase-js';
@@ -58,14 +59,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       async signUpWithPassword(email, password) {
         const { data, error } = await supabase.auth.signUp({ email, password });
-        if (error) return { error: error.message };
+        if (error) return { error: friendlyError(error, 'Could not create your account. Please try again.') };
         const needsEmailConfirmation = !data.session;
         return { error: null, needsEmailConfirmation };
       },
 
       async signInWithPassword(email, password) {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
-        return { error: error ? error.message : null };
+        return { error: error ? friendlyError(error, 'Something went wrong. Please try again.') : null };
       },
 
       async signInWithMagicLink(email) {
@@ -73,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           email,
           options: { emailRedirectTo: window.location.origin },
         });
-        return { error: error ? error.message : null };
+        return { error: error ? friendlyError(error, 'Something went wrong. Please try again.') : null };
       },
 
       async signOut() {

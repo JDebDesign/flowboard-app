@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { usePageMeta } from '../hooks/usePageMeta';
 import { LogoIcon } from '../components/icons';
 import { ColorsSection } from './design-system/ColorsSection';
 import { TypographySection } from './design-system/TypographySection';
@@ -24,6 +25,7 @@ const NAV_ITEMS = [
 ];
 
 export function DesignSystemPage() {
+  usePageMeta({ title: 'Design System', noindex: true });
   return (
     <div className={styles.page}>
       <header className={styles.header}>
@@ -32,7 +34,7 @@ export function DesignSystemPage() {
             <LogoIcon />
           </span>
           <span className={styles.brandName}>FlowBoard</span>
-          <span className={styles.badge}>Design System</span>
+          <h1 className={styles.badge}>Design System</h1>
         </div>
         <Link to="/boards" className={styles.backLink}>
           Back to app

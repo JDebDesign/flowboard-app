@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { friendlyError, MAX_NAME_LENGTH } from '../lib/errors';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useData } from '../context/useData';
 import { Column } from './Column';
@@ -7,6 +8,7 @@ import { CardModal } from './CardModal';
 import type { CardFormValues } from './CardModal';
 import { Button } from './Button';
 import { ConfirmAction } from './ConfirmAction';
+import { usePageMeta } from '../hooks/usePageMeta';
 import fields from './formFields.module.css';
 import styles from './Board.module.css';
 
@@ -21,10 +23,19 @@ export function Board({ boardId }: { boardId: string }) {
   const [mutationError, setMutationError] = useState<string | null>(null);
   const [isRenaming, setIsRenaming] = useState(false);
   const [renameValue, setRenameValue] = useState('');
+  const renameButtonRef = useRef<HTMLButtonElement>(null);
+  usePageMeta({ title: board?.name, noindex: true });
+  const wasRenaming = useRef(false);
+
+  // Return focus to the Rename button once the inline form closes.
+  useEffect(() => {
+    if (wasRenaming.current && !isRenaming) renameButtonRef.current?.focus();
+    wasRenaming.current = isRenaming;
+  }, [isRenaming]);
 
   if (!board) {
     return (
-      <main className={styles.main}>
+      <main id="main" className={styles.main}>
         <p>Board not found.</p>
         <Link to="/boards" className={styles.breadcrumb}>
           Back to boards
@@ -38,7 +49,7 @@ export function Board({ boardId }: { boardId: string }) {
     try {
       await moveCard(board.id, payload.cardId, toColumnId, toIndex);
     } catch (err) {
-      setMutationError(err instanceof Error ? err.message : 'Could not move the card.');
+      setMutationError(friendlyError(err, 'Could not move the card.'));
     }
   };
 
@@ -59,7 +70,7 @@ export function Board({ boardId }: { boardId: string }) {
       }
       setModal(null);
     } catch (err) {
-      setMutationError(err instanceof Error ? err.message : 'Could not save the card.');
+      setMutationError(friendlyError(err, 'Could not save the card.'));
     }
   };
 
@@ -70,7 +81,7 @@ export function Board({ boardId }: { boardId: string }) {
       }
       setModal(null);
     } catch (err) {
-      setMutationError(err instanceof Error ? err.message : 'Could not delete the card.');
+      setMutationError(friendlyError(err, 'Could not delete the card.'));
     }
   };
 
@@ -89,7 +100,7 @@ export function Board({ boardId }: { boardId: string }) {
       await renameBoard(board.id, trimmed);
       setIsRenaming(false);
     } catch (err) {
-      setMutationError(err instanceof Error ? err.message : 'Could not rename the board.');
+      setMutationError(friendlyError(err, 'Could not rename the board.'));
     }
   };
 
@@ -98,7 +109,7 @@ export function Board({ boardId }: { boardId: string }) {
       await deleteBoard(board.id);
       navigate('/boards');
     } catch (err) {
-      setMutationError(err instanceof Error ? err.message : 'Could not delete the board.');
+      setMutationError(friendlyError(err, 'Could not delete the board.'));
     }
   };
 
@@ -106,12 +117,14 @@ export function Board({ boardId }: { boardId: string }) {
   const editingCardColumn = modal?.mode === 'edit' ? board.columns.find((c) => c.cardIds.includes(modal.cardId)) : undefined;
 
   return (
-    <main className={styles.main}>
+    <main id="main" className={styles.main}>
       <div className={styles.headerRow}>
         <Link to="/boards" className={styles.breadcrumb}>
           Boards
         </Link>
-        <span className={styles.separator}>/</span>
+        <span className={styles.separator} aria-hidden="true">
+          /
+        </span>
         {isRenaming ? (
           <form
             className={styles.renameForm}
@@ -122,6 +135,8 @@ export function Board({ boardId }: { boardId: string }) {
           >
             <input
               className={`${fields.input} ${styles.renameInput}`}
+              aria-label="Board name"
+              maxLength={MAX_NAME_LENGTH}
               value={renameValue}
               onChange={(e) => setRenameValue(e.target.value)}
               onKeyDown={(e) => {
@@ -140,7 +155,7 @@ export function Board({ boardId }: { boardId: string }) {
         ) : (
           <>
             <h1 className={styles.boardName}>{board.name}</h1>
-            <Button type="button" variant="ghost-muted" onClick={startRenaming}>
+            <Button ref={renameButtonRef} type="button" variant="ghost-muted" onClick={startRenaming}>
               Rename
             </Button>
           </>

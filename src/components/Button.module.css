@@ -46,13 +46,15 @@
 
 .dangerText {
   color: var(--color-danger);
-  padding: 0;
+  padding: 4px 0;
+  min-height: 24px;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
 }
 
 .ghostMuted {
-  padding: 0;
+  padding: 4px 0;
+  min-height: 24px;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
 }

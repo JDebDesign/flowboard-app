@@ -1,0 +1,10 @@
+{
+  "name": "FlowBoard",
+  "short_name": "FlowBoard",
+  "description": "A simple kanban board app for organizing projects.",
+  "start_url": "/boards",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0369a1",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

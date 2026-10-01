@@ -1,3 +1,4 @@
+import { friendlyError } from '../lib/errors';
 import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import * as api from '../lib/api';
@@ -42,7 +43,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         if (!cancelled) setState(data);
       })
       .catch((err: Error) => {
-        if (!cancelled) setError(err.message);
+        if (!cancelled) setError(friendlyError(err, 'Could not load your boards. Please refresh and try again.'));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);

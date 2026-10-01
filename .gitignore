@@ -26,3 +26,6 @@ src/design-system/tokens.generated.ts
 *.njsproj
 *.sln
 *.sw?
+
+# Test coverage output
+coverage

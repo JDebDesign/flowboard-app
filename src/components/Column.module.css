@@ -28,7 +28,12 @@
   justify-content: space-between;
 }
 
+.cardItem {
+  margin: 0;
+}
+
 .name {
+  margin: 0;
   font-size: 14px;
   font-weight: 500;
   letter-spacing: -0.15px;
@@ -43,6 +48,9 @@
 }
 
 .cardList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -76,4 +84,8 @@
 
 .addCard:hover:not(:disabled) {
   color: var(--color-text);
+}
+
+.cardList:empty {
+  display: none;
 }

@@ -34,16 +34,28 @@ export function Card({ card, onClick, onDragStart, onDragEnd, isDragging }: Card
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
       onClick={onClick}
+      aria-haspopup="dialog"
     >
       <span className={styles.title}>{card.title}</span>
       <div className={styles.metaRow}>
-        <span className={`${styles.priority} ${priorityClass[card.priority]}`}>{card.priority}</span>
-        {card.dueDate && <span className={styles.dueDate}>{formatDueDate(card.dueDate)}</span>}
+        <span className={`${styles.priority} ${priorityClass[card.priority]}`}>
+          <span className="visually-hidden">Priority: </span>
+          {card.priority}
+        </span>
+        {card.dueDate && (
+          <span className={styles.dueDate}>
+            <span className="visually-hidden">Due </span>
+            {formatDueDate(card.dueDate)}
+          </span>
+        )}
       </div>
       {card.assignee && (
         <div className={styles.assignee}>
-          <span className={styles.assigneeAvatar}>{card.assignee.trim().charAt(0).toUpperCase() || '?'}</span>
-          <span>{card.assignee}</span>
+          <span className={styles.assigneeAvatar} aria-hidden="true">{card.assignee.trim().charAt(0).toUpperCase() || '?'}</span>
+          <span>
+            <span className="visually-hidden">Assignee: </span>
+            {card.assignee}
+          </span>
         </div>
       )}
     </button>

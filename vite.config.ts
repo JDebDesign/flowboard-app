@@ -1,5 +1,5 @@
 import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import type { Plugin } from 'vite'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
@@ -41,7 +41,32 @@ function designTokensPlugin(): Plugin {
   }
 }
 
+// Public crawlable routes only. Everything else is auth-gated or a utility page.
+function seoPlugin(siteUrl: string): Plugin {
+  return {
+    name: 'seo',
+    transformIndexHtml: (html) => html.replaceAll('%SITE_URL%', siteUrl),
+    generateBundle() {
+      this.emitFile({
+        type: 'asset',
+        fileName: 'robots.txt',
+        source: `User-agent: *\nAllow: /login\nDisallow: /boards\nDisallow: /design-system\n\nSitemap: ${siteUrl}/sitemap.xml\n`,
+      })
+      this.emitFile({
+        type: 'asset',
+        fileName: 'sitemap.xml',
+        source: `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>${siteUrl}/login</loc></url>\n</urlset>\n`,
+      })
+    },
+  }
+}
+
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [react(), designTokensPlugin()],
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, dirname, '')
+  const siteUrl = (env.VITE_SITE_URL || 'https://flowboard.example.com').replace(/\/$/, '')
+  return {
+    plugins: [react(), designTokensPlugin(), seoPlugin(siteUrl)],
+    define: { __SITE_URL__: JSON.stringify(siteUrl) },
+  }
 })

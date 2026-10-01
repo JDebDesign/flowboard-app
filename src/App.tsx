@@ -1,16 +1,24 @@
+import { lazy, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { DataProvider } from './context/DataContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { LoginPage } from './pages/LoginPage';
-import { BoardsPage } from './pages/BoardsPage';
-import { BoardPage } from './pages/BoardPage';
-import { DesignSystemPage } from './pages/DesignSystemPage';
+import { LoadingScreen } from './components/LoadingScreen';
+import { NotFoundPage } from './pages/NotFoundPage';
+
+const BoardsPage = lazy(() => import('./pages/BoardsPage').then((m) => ({ default: m.BoardsPage })));
+const BoardPage = lazy(() => import('./pages/BoardPage').then((m) => ({ default: m.BoardPage })));
+const DesignSystemPage = lazy(() => import('./pages/DesignSystemPage').then((m) => ({ default: m.DesignSystemPage })));
 
 function App() {
   return (
     <AuthProvider>
+      <a href="#main" className="skip-link">
+        Skip to main content
+      </a>
       <DataProvider>
+        <Suspense fallback={<LoadingScreen />}>
         <Routes>
           <Route path="/" element={<Navigate to="/boards" replace />} />
           <Route path="/login" element={<LoginPage />} />
@@ -31,8 +39,9 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="*" element={<Navigate to="/boards" replace />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
+        </Suspense>
       </DataProvider>
     </AuthProvider>
   );
